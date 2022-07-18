@@ -25,8 +25,6 @@ spring:
   rabbitmq:
     addresses: amqps://cijluuxh:T8Cf2gt3QpTu6eAkTMNo3-3wf18AlOI9@moose.rmq.cloudamqp.com/cijluuxh
 
-
-
 logging:
   level:
     com.ead: TRACE
@@ -42,10 +40,25 @@ ead:
     exchange:
       userEvent: ead.userevent
 
-
 eureka:
   client:
     serviceUrl:
       defaultZone: 'http://localhost:8761/eureka'
   instance:
     hostname: localhost
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      circuitbreakerInstance:
+        slidingWindowSize: 30
+        permittedNumberOfCallsInHalfOpenState: 2
+        slidingWindowType: TIME_BASED
+        minimumNumberOfCalls: 2
+        waitDurationInOpenState: 30s
+        failureRateThreshold: 80
+  retry:
+    instances:
+      retryInstance:
+        maxRetryAttempts: 3
+        waitDuration: 5s
